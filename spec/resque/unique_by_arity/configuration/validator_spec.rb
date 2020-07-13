@@ -60,24 +60,6 @@ describe Resque::UniqueByArity::Configuration::Validator do
       it { expect(Resque::UniqueByArity).to have_received(:log) }
     end
 
-    context 'when lock_after_execution_period is set' do
-      let(:config) do
-        Resque::UniqueByArity::Configuration.new(
-          lock_after_execution_period: 100
-        )
-      end
-
-      subject { described_class.new(config) }
-
-      before do
-        allow(Resque::UniqueByArity).to receive(:log)
-
-        subject.log_warnings
-      end
-
-      it { expect(Resque::UniqueByArity).to have_received(:log) }
-    end
-
     context 'when arity_for_uniqueness is set' do
       let(:config) do
         Resque::UniqueByArity::Configuration.new(

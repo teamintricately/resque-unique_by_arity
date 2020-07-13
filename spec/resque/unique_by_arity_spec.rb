@@ -21,9 +21,6 @@ RSpec.describe Resque::UniqueByArity do
     it 'has default arity_validation' do
       expect(Resque::UniqueByArity.configuration.arity_validation).to eq(nil)
     end
-    it 'has default lock_after_execution_period' do
-      expect(Resque::UniqueByArity.configuration.lock_after_execution_period).to eq(0)
-    end
     it 'has default runtime_lock_timeout' do
       expect(Resque::UniqueByArity.configuration.runtime_lock_timeout).to eq(60 * 60 * 24 * 5)
     end
@@ -45,9 +42,6 @@ RSpec.describe Resque::UniqueByArity do
     it 'has default unique_across_queues' do
       expect(Resque::UniqueByArity.configuration.unique_across_queues).to eq(false)
     end
-    it 'has default ttl' do
-      expect(Resque::UniqueByArity.configuration.ttl).to eq(-1)
-    end
     it 'has default debug_mode' do
       expect(Resque::UniqueByArity.configuration.debug_mode).to eq(false)
     end
@@ -61,8 +55,6 @@ RSpec.describe Resque::UniqueByArity do
       let(:runtime_lock_timeout) { 10 }
       let(:runtime_requeue_interval) { 4 }
       let(:unique_at_runtime_key_base) { 'abc' }
-      let(:lock_after_execution_period) { 7 }
-      let(:ttl) { 2 }
       let(:unique_in_queue_key_base) { 'def' }
       let(:debug_mode) { true }
       before do
@@ -75,8 +67,6 @@ RSpec.describe Resque::UniqueByArity do
           config.runtime_lock_timeout = runtime_lock_timeout
           config.runtime_requeue_interval = runtime_requeue_interval
           config.unique_at_runtime_key_base = unique_at_runtime_key_base
-          config.lock_after_execution_period = lock_after_execution_period
-          config.ttl = ttl
           config.unique_in_queue_key_base = unique_in_queue_key_base
           # Normally debug mode should be set via an environment variable switch
           #   rather than in the configure block.
@@ -95,8 +85,6 @@ RSpec.describe Resque::UniqueByArity do
         expect(Resque::UniqueByArity.configuration.runtime_lock_timeout).to eq(runtime_lock_timeout)
         expect(Resque::UniqueByArity.configuration.runtime_requeue_interval).to eq(runtime_requeue_interval)
         expect(Resque::UniqueByArity.configuration.unique_at_runtime_key_base).to eq(unique_at_runtime_key_base)
-        expect(Resque::UniqueByArity.configuration.lock_after_execution_period).to eq(lock_after_execution_period)
-        expect(Resque::UniqueByArity.configuration.ttl).to eq(ttl)
         expect(Resque::UniqueByArity.configuration.unique_in_queue_key_base).to eq(unique_in_queue_key_base)
         expect(Resque::UniqueByArity.configuration.debug_mode).to eq(debug_mode)
       end
