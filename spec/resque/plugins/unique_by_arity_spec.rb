@@ -108,8 +108,8 @@ RSpec.describe Resque::Plugins::UniqueByArity do
   end
 
   context '.unique_at_runtime_redis_key' do
-    it 'gives ef0f8a28f2c84e48211489121112e67f' do
-      expect(subject.unique_at_runtime_redis_key(*args)).to eq 'ef0f8a28f2c84e48211489121112e67f'
+    it 'gives RealFake:ef0f8a28f2c84e48211489121112e67f' do
+      expect(subject.unique_at_runtime_redis_key(*args)).to eq 'RealFake:ef0f8a28f2c84e48211489121112e67f'
     end
     context 'when perform has no required args' do
       let(:instance) do
@@ -130,8 +130,8 @@ RSpec.describe Resque::Plugins::UniqueByArity do
       end
       let(:args) { [opts] }
 
-      it 'gives b7784ea79e21dc5d1a2fab675a505d53' do
-        expect(subject.unique_at_runtime_redis_key(*args)).to eq 'b7784ea79e21dc5d1a2fab675a505d53'
+      it 'gives RealFake:b7784ea79e21dc5d1a2fab675a505d53' do
+        expect(subject.unique_at_runtime_redis_key(*args)).to eq 'RealFake:b7784ea79e21dc5d1a2fab675a505d53'
       end
     end
     context 'when perform has required args, but arity is 0' do
@@ -153,8 +153,8 @@ RSpec.describe Resque::Plugins::UniqueByArity do
       end
       let(:args) { [opts] }
 
-      it 'gives b7784ea79e21dc5d1a2fab675a505d53' do
-        expect(subject.unique_at_runtime_redis_key(*args)).to eq 'b7784ea79e21dc5d1a2fab675a505d53'
+      it 'gives RealFake:b7784ea79e21dc5d1a2fab675a505d53' do
+        expect(subject.unique_at_runtime_redis_key(*args)).to eq 'RealFake:b7784ea79e21dc5d1a2fab675a505d53'
       end
     end
     context 'when custom unique_at_runtime_key_base' do
@@ -177,12 +177,12 @@ RSpec.describe Resque::Plugins::UniqueByArity do
       end
       let(:args) { [opts] }
 
-      it 'gives b7784ea79e21dc5d1a2fab675a505d53' do
-        expect(subject.unique_at_runtime_redis_key(*args)).to eq 'b7784ea79e21dc5d1a2fab675a505d53'
+      it 'gives RealFake:b7784ea79e21dc5d1a2fab675a505d53' do
+        expect(subject.unique_at_runtime_redis_key(*args)).to eq 'RealFake:b7784ea79e21dc5d1a2fab675a505d53'
       end
 
-      it 'gives b7784ea79e21dc5d1a2fab675a505d53' do
-        expect(subject.unique_at_runtime_redis_key(*args)).to eq 'b7784ea79e21dc5d1a2fab675a505d53'
+      it 'gives RealFake:b7784ea79e21dc5d1a2fab675a505d53' do
+        expect(subject.unique_at_runtime_redis_key(*args)).to eq 'RealFake:b7784ea79e21dc5d1a2fab675a505d53'
       end
     end
   end

@@ -84,8 +84,9 @@ module Resque
             # @return [String] the key used to enforce loneliness (uniqueness at runtime)
             define_method(:unique_at_runtime_redis_key) do |*args|
               unique_hash, args_for_uniqueness = redis_unique_hash('class' => to_s, 'args' => args)
-              Resque::UniqueByArity.debug("#{Resque::UniqueAtRuntime::PLUGIN_TAG} #{self}.unique_at_runtime_redis_key for #{args_for_uniqueness} is: #{ColorizedString[runtime_key_namespace].yellow}")
-              unique_hash
+              key = "#{self}:#{unique_hash}"
+              Resque::UniqueByArity.debug("#{Resque::UniqueAtRuntime::PLUGIN_TAG} #{self}.unique_at_runtime_redis_key for #{args_for_uniqueness} is: #{ColorizedString[key].yellow}")
+              key
             end
             # @return [Fixnum] number of keys that were deleted
             define_method(:purge_unique_at_runtime_redis_keys) do
