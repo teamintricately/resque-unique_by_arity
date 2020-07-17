@@ -13,8 +13,6 @@ module Resque
       DEFAULT_AT_RUNTIME_KEY_BASE = 'r-uar'.freeze
 
       # For resque-unique_in_queue
-      DEFAULT_LOCK_AFTER_EXECUTION_PERIOD = 0
-      DEFAULT_TTL = -1
       DEFAULT_IN_QUEUE_KEY_BASE = 'r-uiq'.freeze
 
       include Singleton
@@ -33,7 +31,6 @@ module Resque
         @log_level = DEFAULT_LOG_LEVEL
         @arity_for_uniqueness = nil
         @arity_validation = nil
-        @lock_after_execution_period = DEFAULT_LOCK_AFTER_EXECUTION_PERIOD
         @runtime_lock_timeout = DEFAULT_LOCK_TIMEOUT
         @runtime_requeue_interval = DEFAULT_REQUEUE_INTERVAL
         @unique_at_runtime_key_base = DEFAULT_AT_RUNTIME_KEY_BASE
@@ -41,7 +38,6 @@ module Resque
         @unique_at_runtime = false
         @unique_in_queue = false
         @unique_across_queues = false
-        @ttl = DEFAULT_TTL
         if @debug_mode
           # Make sure there is a logger when in debug_mode
           @logger ||= Logger.new(STDOUT)

@@ -10,6 +10,9 @@ SimpleCov.start
 # This gem
 require 'resque-unique_by_arity'
 
+require_relative './fixtures/unique_fake_job_with_arity'
+require_relative './fixtures/unique_slow_fake_job_with_arity'
+
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
   config.example_status_persistence_file_path = '.rspec_status'

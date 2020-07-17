@@ -12,7 +12,6 @@ module Resque
       attr_accessor :log_level
       attr_accessor :arity_for_uniqueness
       attr_accessor :arity_validation
-      attr_accessor :lock_after_execution_period
       attr_accessor :runtime_lock_timeout
       attr_accessor :runtime_requeue_interval
       attr_accessor :unique_at_runtime
@@ -20,7 +19,6 @@ module Resque
       attr_accessor :unique_in_queue
       attr_accessor :unique_in_queue_key_base
       attr_accessor :unique_across_queues
-      attr_accessor :ttl
       attr_accessor :base_klass_name
       attr_accessor :debug_mode
 
@@ -31,8 +29,6 @@ module Resque
         @arity_validation = options.key?(:arity_validation) ? options[:arity_validation] : defcon(:arity_validation) || :warning
         raise ArgumentError, "Resque::Plugins::UniqueByArity.new requires arity_validation values of #{arity_validation.inspect}, or a class inheriting from Exception, but the value is #{@arity_validation} (#{@arity_validation.class})" unless VALID_ARITY_VALIDATION_LEVELS.include?(@arity_validation) || !@arity_validation.respond_to?(:ancestors) || @arity_validation.ancestors.include?(Exception)
 
-        @ttl = options.key?(:ttl) ? options[:ttl] : defcon(:ttl) || nil
-        @lock_after_execution_period = options.key?(:lock_after_execution_period) ? options[:lock_after_execution_period] : defcon(:lock_after_execution_period) || nil
         @runtime_lock_timeout = options.key?(:runtime_lock_timeout) ? options[:runtime_lock_timeout] : defcon(:runtime_lock_timeout) || nil
         @runtime_requeue_interval = options.key?(:runtime_requeue_interval) ? options[:runtime_requeue_interval] : defcon(:runtime_requeue_interval) || nil
         @unique_at_runtime = options.key?(:unique_at_runtime) ? options[:unique_at_runtime] : defcon(:unique_at_runtime) || false
@@ -69,9 +65,7 @@ module Resque
           arity_validation: arity_validation,
           base_klass_name: base_klass_name,
           debug_mode: debug_mode,
-          lock_after_execution_period: lock_after_execution_period,
           runtime_lock_timeout: runtime_lock_timeout,
-          ttl: ttl,
           unique_at_runtime: unique_at_runtime,
           unique_in_queue: unique_in_queue,
           unique_across_queues: unique_across_queues

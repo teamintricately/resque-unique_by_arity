@@ -63,14 +63,6 @@ module Resque
 
         # For resque-unique_in_queue
         #
-        if @configuration.lock_after_execution_period
-          base.instance_variable_set(:@lock_after_execution_period, @configuration.lock_after_execution_period)
-        end
-
-        if @configuration.ttl
-          base.instance_variable_set(:@ttl, @configuration.ttl)
-        end
-
         # Normally doesn't make sense to override per each class because
         #   it wouldn't be able to determine or enforce uniqueness across queues,
         #   and general cleanup of stray keys would be nearly impossible.

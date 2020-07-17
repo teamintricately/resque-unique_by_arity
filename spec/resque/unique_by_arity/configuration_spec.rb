@@ -8,7 +8,6 @@ describe Resque::UniqueByArity::Configuration do
     let(:logger) { Logger.new('/dev/null') }
     let(:arity_for_uniqueness) { 0 }
     let(:arity_validation) { :warning }
-    let(:lock_after_execution_period) { nil }
     let(:runtime_lock_timeout) { 10 }
     let(:runtime_requeue_interval) { 15 }
     let(:unique_at_runtime) { true }
@@ -26,7 +25,6 @@ describe Resque::UniqueByArity::Configuration do
           log_level: log_level,
           arity_for_uniqueness: arity_for_uniqueness,
           arity_validation: arity_validation,
-          lock_after_execution_period: lock_after_execution_period,
           runtime_lock_timeout: runtime_lock_timeout,
           runtime_requeue_interval: runtime_requeue_interval,
           unique_at_runtime: unique_at_runtime,
@@ -67,12 +65,6 @@ describe Resque::UniqueByArity::Configuration do
         subject { instance.arity_validation }
         it 'sets arity_validation' do
           is_expected.to eq(arity_validation)
-        end
-      end
-      context 'lock_after_execution_period option' do
-        subject { instance.lock_after_execution_period }
-        it 'sets lock_after_execution_period' do
-          is_expected.to eq(lock_after_execution_period)
         end
       end
       context 'runtime_lock_timeout option' do
@@ -158,9 +150,7 @@ describe Resque::UniqueByArity::Configuration do
                               arity_validation: arity_validation,
                               base_klass_name: nil, # Not set by initialize!
                               debug_mode: false, # normalized to true || false
-                              lock_after_execution_period: lock_after_execution_period,
                               runtime_lock_timeout: runtime_lock_timeout,
-                              ttl: -1,
                               unique_at_runtime: unique_at_runtime,
                               unique_in_queue: unique_in_queue,
                               unique_across_queues: unique_across_queues

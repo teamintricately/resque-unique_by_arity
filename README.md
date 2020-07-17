@@ -1,12 +1,12 @@
 # Resque::UniqueByArity
 
-Because some jobs have parameters that you do not want to consider for 
+Because some jobs have parameters that you do not want to consider for
 determination of uniqueness.
 
 NOTE:
 
 I rewrote, and renamed, both `resque_solo` and `resque-lonely_job`, becuase they
- can't be used together.  Why?  Their `redis_key` methods directly conflict, 
+ can't be used together.  Why?  Their `redis_key` methods directly conflict,
  among other more subtle issues.
 
 This gem requires use of my rewritten gems for uniqueness enforcement:
@@ -48,7 +48,6 @@ class MyJob
   end
   include Resque::Plugins::UniqueByArity.new(
     arity_for_uniqueness: 1,
-    lock_after_execution_period: 60,
     runtime_lock_timeout: 60 * 60 * 24 * 5, # 5 days
     unique_at_runtime: true,
     unique_in_queue: true
@@ -92,8 +91,6 @@ Create an initializer (e.g. `config/initializers/resque-unique_by_arity.rb` for 
     config.runtime_lock_timeout = 60 * 60 * 24 * 5
     config.runtime_requeue_interval = 1
     config.unique_at_runtime_key_base = 'r-uar'.freeze
-    config.lock_after_execution_period = 0
-    config.ttl = -1
     config.unique_in_queue_key_base = 'r-uiq'.freeze
     # Debug Mode is preferably set via an environment variable:
     #   to one of 'true', 'arity', or 'arity,queue,runtime' for all three tools:
@@ -105,7 +102,7 @@ Create an initializer (e.g. `config/initializers/resque-unique_by_arity.rb` for 
 ### Per Job Class Configuration
 
 This gem will take care to set the class instance variables (similar to the
- familiar `@queue` class instance variable) that are utilized by 
+ familiar `@queue` class instance variable) that are utilized by
  `resque-unique_in_queue` and `resque-unique_at_runtime` (default values shown):
 
  ```ruby
@@ -115,8 +112,6 @@ This gem will take care to set the class instance variables (similar to the
 @unique_at_runtime_key_base = 'r-uar'.freeze
 
 # For resque-unique_in_queue
-@lock_after_execution_period = 0
-@ttl = -1
 @unique_in_queue_key_base = 'r-uiq'.freeze
 ```
 
@@ -132,8 +127,6 @@ All you need to do is configure this gem accordingly:
     runtime_requeue_interval: 1,
     # would override the global setting, probably a bad idea.
     # unique_at_runtime_key_base: 'r-uar'.freeze,
-    lock_after_execution_period: 0,
-    ttl: -1,
     # would override the global setting, probably a bad idea.
     # unique_in_queue_key_base: 'r-uiq'.freeze
   )
@@ -168,7 +161,7 @@ class MyJob
     # Because the third argument is optional the arity valdiation will not approve.
     # Arguments to be considered for uniqueness should be required arguments.
     # The warning log might look like:
-    # 
+    #
     #    MyJob.perform has the following required parameters: [:my, :cat], which is not enough to satisfy the configured arity_for_uniqueness of 3
   end
   include Resque::Plugins::UniqueByArity.new(
@@ -192,7 +185,6 @@ class MyJob
   end
   include Resque::Plugins::UniqueByArity.new(
     arity_for_uniqueness: 1,
-    lock_after_execution_period: 60,
     unique_at_runtime: true
   )
 end
@@ -233,7 +225,7 @@ end
 ```
 
 #### Oops, I have stale runtime uniqueness keys for MyJob stored in Redis...
- 
+
 Preventing jobs with matching signatures from running, and they never get
 dequeued because there is no actual corresponding job to dequeue.
 
@@ -278,7 +270,7 @@ end
 ```
 
 #### Oops, I have stale Queue Time uniqueness keys...
- 
+
 Preventing jobs with matching signatures from being queued, and they never get
 dequeued because there is no actual corresponding job to dequeue.
 
@@ -358,8 +350,8 @@ class MyJob
     #...
   )
 
-  # Core hashing algorithm for a job used for *all 3 types* of uniqueness 
-  # @return [Array<String, arguments>], where the string is the unique digest, and arguments are the specific args that were used to calculate the digest 
+  # Core hashing algorithm for a job used for *all 3 types* of uniqueness
+  # @return [Array<String, arguments>], where the string is the unique digest, and arguments are the specific args that were used to calculate the digest
   def self.redis_unique_hash(payload)
     #       for how the built-in version works
     # uniqueness_args = payload["args"] # over simplified & ignoring arity
@@ -370,7 +362,7 @@ class MyJob
   def self.unique_in_queue_redis_key_prefix
     # "unique_job:#{self}" # <= default value
   end
-  
+
   def self.unique_in_queue_redis_key(queue, payload)
     # unique_hash, _args_for_uniqueness = redis_unique_hash(payload)
     # "#{unique_in_queue_key_namespace(queue)}:#{unique_in_queue_redis_key_prefix}:#{unique_hash}"
@@ -381,11 +373,11 @@ class MyJob
     # "r-uiq:queue:#{queue}:job" # <= is for unique within queue at queue time
     # "r-uiq:across_queues:job" # <= is for unique across all queues at queue time
   end
-  
+
   def self.runtime_key_namespace
     # "unique_at_runtime:#{self}"
   end
-  
+
   def self.unique_at_runtime_redis_key(*args)
     # unique_hash, _args_for_uniqueness = redis_unique_hash({"class" => self.to_s, "args" => args})
     # key = "#{runtime_key_namespace}:#{unique_hash}" # <= simplified default
@@ -436,7 +428,7 @@ spec.add_dependency 'resque-unique_by_arity', '~> 0.0'
 
 * Copyright (c) 2017 - 2018 [Peter H. Boling][peterboling] of [Rails Bling][railsbling]
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT) 
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 
 [license]: LICENSE
 [semver]: http://semver.org/
