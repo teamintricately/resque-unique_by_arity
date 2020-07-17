@@ -2,7 +2,8 @@ require 'spec_helper'
 
 RSpec.describe 'Resque overview' do
   before do
-    Resque.redis.del(Resque.redis.keys)
+    keys = Resque.redis.keys
+    Resque.redis.del(keys) if keys.any?
   end
 
   it 'enqueues jobs' do
